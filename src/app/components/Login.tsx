@@ -1,38 +1,38 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import Layout from '../components/Layout'; // Adjust the import based on your project structure
 
 const Login: React.FC = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const router = useRouter();
 
   useEffect(() => {
     const token = localStorage.getItem('access_token');
     if (token) {
-      window.location.href = '/dashboard';
+      router.push('/dashboard');
     }
-  }, []);
+  }, [router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const response = await fetch('http://localhost:3001/auth/login', {
+      const response = await fetch(process.env.NEXT_PUBLIC_API_URL + '/auth/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ username, password }),
       });
+
       if (response.ok) {
-        // Handle successful login
         const data = await response.json();
         localStorage.setItem('access_token', data.access_token);
-        window.location.href = '/dashboard';
+        router.push('/dashboard');
       } else {
-        // Handle login error
-        console.error('Login failed');
+        console.error('Login failed: Invalid credentials');
       }
     } catch (error) {
       console.error('Error:', error);
@@ -82,7 +82,6 @@ const Login: React.FC = () => {
         </div>
       </div>
     </div>
-
   );
 };
 
