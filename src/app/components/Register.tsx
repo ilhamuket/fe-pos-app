@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import Layout from '../components/Layout'; // Adjust the import based on your project structure
 
 const Register: React.FC = () => {
@@ -9,19 +10,24 @@ const Register: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [showErrorModal, setShowErrorModal] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+  const router = useRouter();
 
 
   useEffect(() => {
     const token = localStorage.getItem('access_token');
     if (token) {
-      window.location.href = '/dashboard';
+      router.push('/dashboard');
     }
   }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const response = await fetch('http://localhost:3001/auth/register', {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://pos-backend-nest-5935331f9eea.herokuapp.com';
+      const response = await fetch(apiUrl + '/auth/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -29,16 +35,17 @@ const Register: React.FC = () => {
         body: JSON.stringify({ username, email, password }),
       });
       if (response.ok) {
-        // Handle successful registration
         const data = await response.json();
         localStorage.setItem('access_token', data.access_token);
-        window.location.href = '/dashboard';
+        setShowSuccessModal(true);
       } else {
-        // Handle registration error
-        console.error('Registration failed');
+        const errorData = await response.json();
+        setErrorMessage(errorData.message || 'Login failed');
+        setShowErrorModal(true);
       }
     } catch (error) {
-      console.error('Error:', error);
+      setErrorMessage('An error occurred. Please try again.');
+      setShowErrorModal(true);
     }
   };
 
@@ -106,6 +113,52 @@ const Register: React.FC = () => {
               <a className="text-blue-500">Login</a>
             </Link>
           </div>
+          {showSuccessModal && (
+            <div className="modal modal-open">
+              <div className="modal-box flex flex-col items-center">
+                <div className="checkmark-circle">
+                  <div className="background"></div>
+                  <div className="checkmark draw"></div>
+                </div>
+                <h3 className="font-bold text-lg mt-4">Login Berhasil</h3>
+                <p className="py-4">
+                  Anda akan diarahkan ke halaman dashboard
+                </p>
+                <div className="modal-action">
+                  <button
+                    className="btn"
+                    onClick={() => {
+                      setShowSuccessModal(false);
+                      router.push('/dashboard');
+                    }}
+                  >
+                    OK
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {showErrorModal && (
+            <div className="modal modal-open">
+              <div className="modal-box flex flex-col items-center">
+                <div className="xmark-circle">
+                  <div className="background"></div>
+                  <div className="xmark draw"></div>
+                </div>
+                <h3 className="font-bold text-lg mt-4">Login Gagal</h3>
+                <p className="py-4">{errorMessage}</p>
+                <div className="modal-action">
+                  <button
+                    className="btn"
+                    onClick={() => setShowErrorModal(false)}
+                  >
+                    OK
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>

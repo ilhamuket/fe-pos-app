@@ -7,6 +7,9 @@ import Link from 'next/link';
 const Login: React.FC = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [showErrorModal, setShowErrorModal] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
   const router = useRouter();
 
   useEffect(() => {
@@ -19,7 +22,8 @@ const Login: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const response = await fetch(process.env.NEXT_PUBLIC_API_URL + '/auth/login', {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://pos-backend-nest-5935331f9eea.herokuapp.com';
+      const response = await fetch(apiUrl + '/auth/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -30,12 +34,15 @@ const Login: React.FC = () => {
       if (response.ok) {
         const data = await response.json();
         localStorage.setItem('access_token', data.access_token);
-        router.push('/dashboard');
+        setShowSuccessModal(true);
       } else {
-        console.error('Login failed: Invalid credentials');
+        const errorData = await response.json();
+        setErrorMessage(errorData.message || 'Login failed');
+        setShowErrorModal(true);
       }
     } catch (error) {
-      console.error('Error:', error);
+      setErrorMessage('An error occurred. Please try again.');
+      setShowErrorModal(true);
     }
   };
 
@@ -79,6 +86,50 @@ const Login: React.FC = () => {
               <a className="text-blue-500">Register</a>
             </Link>
           </div>
+          {showSuccessModal && (
+            <div className="modal modal-open">
+              <div className="modal-box flex flex-col items-center">
+                <div className="checkmark-circle">
+                  <div className="background"></div>
+                  <div className="checkmark draw"></div>
+                </div>
+                <h3 className="font-bold text-lg mt-4">Login Successful!</h3>
+                <p className="py-4">You will be redirected shortly.</p>
+                <div className="modal-action">
+                  <button
+                    className="btn"
+                    onClick={() => {
+                      setShowSuccessModal(false);
+                      router.push('/dashboard');
+                    }}
+                  >
+                    OK
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {showErrorModal && (
+            <div className="modal modal-open">
+              <div className="modal-box flex flex-col items-center">
+                <div className="xmark-circle">
+                  <div className="background"></div>
+                  <div className="xmark draw"></div>
+                </div>
+                <h3 className="font-bold text-lg mt-4">Login Failed</h3>
+                <p className="py-4">{errorMessage}</p>
+                <div className="modal-action">
+                  <button
+                    className="btn"
+                    onClick={() => setShowErrorModal(false)}
+                  >
+                    OK
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>
