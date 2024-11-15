@@ -19,7 +19,7 @@ const Dashboard: React.FC = () => {
 
   return (
     <Layout>
-      <div className="container mx-auto p-4">
+      <div>
         <h1 className="text-2xl font-bold">Welcome to the Dashboard, {username}!</h1>
         {/* Add more dashboard content here */}
       </div>
