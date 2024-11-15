@@ -1,15 +1,19 @@
 "use client";
 import React, { useEffect, useState, ReactNode } from 'react';
 import Link from 'next/link';
+import Header from './Header';
 
-type LayoutProps = {
-  children: ReactNode;
-};
+interface LayoutProps {
+  hideHeader?: boolean;
+  children: React.ReactNode;
+}
 
-const Layout = ({ children }: LayoutProps) => {
+const Layout = ({ hideHeader, children }: LayoutProps) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const theme = localStorage.getItem('theme') || 'dark';
 
   useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme || 'dark');
     const token = localStorage.getItem('access_token');
     if (token) {
       setIsLoggedIn(true);
@@ -23,21 +27,15 @@ const Layout = ({ children }: LayoutProps) => {
 
   return (
     <div className="min-h-screen flex flex-col">
-      <header className="bg-base-200 p-4 shadow-md">
-        <nav className="container mx-auto flex justify-between items-center">
-          <div className="text-xl font-bold">
-            <Link href="/">MyApp</Link>
-          </div>
-          <div>
-            {isLoggedIn && (
-              <button onClick={handleLogout} className="btn btn-primary">
-                Logout
-              </button>
-            )}
-          </div>
-        </nav>
-      </header>
-      <main className="flex-grow container mx-auto p-4">{children}</main>
+      {!hideHeader &&
+        <>
+          <Header isLoggedIn={isLoggedIn} handleLogout={handleLogout} />
+          <main className="flex-grow container mx-auto p-4">{children}</main>
+        </>
+      }
+
+      {hideHeader && <main>{children}</main>}
+
     </div>
   );
 };
