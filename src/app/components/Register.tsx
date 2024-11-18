@@ -3,13 +3,6 @@
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { GetServerSideProps } from 'next';
-import { redirectIfAuthenticated } from '../lib/middleware';
-
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const result = await redirectIfAuthenticated(context);
-  return result;
-};
 
 const Register: React.FC = () => {
   const [username, setUsername] = useState('');
