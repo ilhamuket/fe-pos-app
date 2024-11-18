@@ -7,14 +7,17 @@ const Dashboard: React.FC = () => {
   const [username, setUsername] = useState('');
 
   useEffect(() => {
-    const token = localStorage.getItem('access_token');
-    if (!token) {
-      window.location.href = '/login';
-    } else {
-      // Fetch user data or decode token to get username
-      // This is a placeholder, replace with actual user fetching logic
-      setUsername('User');
+    if (typeof window !== "undefined") {
+      const token = localStorage.getItem('access_token');
+      if (!token) {
+        window.location.href = '/login';
+      } else {
+        // Fetch user data or decode token to get username
+        // This is a placeholder, replace with actual user fetching logic
+        setUsername('User');
+      }
     }
+
   }, []);
 
   return (
