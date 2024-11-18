@@ -17,7 +17,7 @@ const Sidebar = () => {
   const isActive = (href: string) => pathname === href;
 
   return (
-    <div className={`flex flex-col ${isSidebarOpen ? 'w-60' : 'w-20'} transition-width duration-300 h-full p-1 sidebar`}>
+    <div className={`flex flex-col ${isSidebarOpen ? 'w-60' : 'w-20'} drop-shadow-md transition-width duration-300 h-full p-1 sidebar`}>
       <div className="flex items-center justify-center h-16">
         <img src="/path/to/dummy-logo.png" alt="Logo" className="h-10 w-auto" />
       </div>

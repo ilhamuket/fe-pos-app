@@ -188,6 +188,10 @@ body {
   background-color: #f2f4f8;
 }
 
+.bg-141414 {
+  background-color: #141414;
+}
+
 /* Light mode */
 .menu li:hover {
   background-color: #f0f7ff;
