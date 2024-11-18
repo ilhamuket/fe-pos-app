@@ -15,4 +15,8 @@ export default {
     },
   },
   plugins: [require("daisyui")],
+  daisyui: {
+    themes: ["dark", "light"], // Tambahkan tema yang didukung
+    darkTheme: "dark", // Set tema default ke dark
+  },
 } satisfies Config;
