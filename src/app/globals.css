@@ -6,7 +6,7 @@
   --background-light: #ffffff;
   --foreground-light: #171717;
   --background-dark: #0a0a0a;
-  --foreground-dark: #ededed;
+  --foreground-dark: #f2f4f8;
   --background: var(--background-light);
   --foreground: var(--foreground-light);
 }
@@ -139,6 +139,90 @@ body {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-[data-theme='dark'] .modal-box {
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+[data-theme='light'] .sidebar {
+  background-color: rgb(255, 255, 255);
+  color: #333;
+}
+
+[data-theme='light'] .sidebar .text-white {
+  color: #333 !important;
+}
+
+[data-theme='light'] .sidebar a:hover {
+  background-color: #e0e0e0;
+}
+
+[data-theme='dark'] .sidebar {
+  background-color: rgb(20, 20, 20);
+  color: rgb(255, 255, 255);
+}
+
+[data-theme='dark'] .sidebar a {
+  color: rgb(255, 255, 255);
+}
+
+[data-theme='dark'] .sidebar a:hover {
+  background-color: #333;
+}
+
+[data-theme='dark'] .navbar {
+  background-color: rgb(20, 20, 20);
+  color: rgb(255, 255, 255);
+}
+
+[data-theme='dark'] .navbar a {
+  color: rgb(255, 255, 255);
+}
+
+[data-theme='dark'] .navbar a:hover {
+  background-color: #333;
+}
+
+.custom-space-y> :not([hidden])~ :not([hidden]) {
+  --tw-space-y-reverse: 0;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.bg-f2f4f8 {
+  background-color: #f2f4f8;
+}
+
+.bg-141414 {
+  background-color: #141414;
+}
+
+/* Light mode */
+.menu li:hover {
+  background-color: #f0f7ff;
+  color: #161a2a;
+}
+
+/* Dark mode */
+[data-theme='dark'] .menu li:hover {
+  background-color: #161a2a;
+  color: #f0f7ff;
+}
+
+.bg-active {
+  background-color: #f0f7ff;
+  color: #161a2a;
+}
+
+/* Dark mode */
+[data-theme='dark'] .bg-active {
+  background-color: #161a2a;
+  color: #f0f7ff;
+}
+
+/* Light mode */
+.btn-expand {
+  color: inherit;
+  background: #e4e9f0;
+}
+
+/* Dark mode */
+[data-theme='dark'] .btn-expand {
+  color: inherit;
+  background: #333;
 }

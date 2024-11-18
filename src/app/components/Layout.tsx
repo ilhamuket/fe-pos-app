@@ -1,26 +1,48 @@
-"use client";
-import React, { useEffect, useState, ReactNode } from 'react';
-import Link from 'next/link';
-import Header from './Header';
+import React, { useEffect, useState } from 'react';
+import Sidebar from './Sidebar';
+import Navbar from './Navbar';
 
 interface LayoutProps {
-  hideHeader?: boolean;
+  hideHeader: boolean;
   children: React.ReactNode;
 }
 
 const Layout = ({ hideHeader, children }: LayoutProps) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const theme = typeof window !== "undefined" ? localStorage.getItem('theme') || 'dark' : 'dark';
+  const [isClient, setIsClient] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(() => {
+    if (typeof window !== "undefined") {
+      return localStorage.getItem('theme') === 'dark';
+    }
+    return true; // Default to dark mode
+  });
 
   useEffect(() => {
-    document.documentElement.setAttribute('data-theme', theme || 'dark');
+    const theme = isDarkMode ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-theme', theme);
+    if (typeof window !== "undefined") {
+      localStorage.setItem('theme', theme);
+
+    }
+
+    if (theme === 'light') {
+      setIsClient(true);
+    } else {
+      setIsClient(false);
+    }
+
+
     if (typeof window !== "undefined") {
       const token = localStorage.getItem('access_token');
       if (token) {
         setIsLoggedIn(true);
       }
     }
-  }, [theme]);
+  }, [isDarkMode]);
+
+  const toggleDarkMode = () => {
+    setIsDarkMode(prevMode => !prevMode);
+  };
 
   const handleLogout = () => {
     localStorage.removeItem('access_token');
@@ -30,14 +52,17 @@ const Layout = ({ hideHeader, children }: LayoutProps) => {
   return (
     <div className="min-h-screen flex flex-col">
       {!hideHeader &&
-        <>
-          <Header isLoggedIn={isLoggedIn} handleLogout={handleLogout} />
-          <main className="flex-grow container mx-auto p-4">{children}</main>
-        </>
+        <div className="flex h-screen">
+          <Sidebar />
+          <div className="flex-1 flex flex-col">
+            <Navbar handleLogout={handleLogout} isLoggedIn={isLoggedIn} toggleDarkMode={toggleDarkMode} />
+            <main className={`flex-grow w-full p-4 ${isClient ? 'bg-f2f4f8' : ''}`}>
+              {children}
+            </main>
+          </div>
+        </div>
       }
-
       {hideHeader && <main>{children}</main>}
-
     </div>
   );
 };
