@@ -10,15 +10,17 @@ interface LayoutProps {
 
 const Layout = ({ hideHeader, children }: LayoutProps) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const theme = localStorage.getItem('theme') || 'dark';
+  const theme = typeof window !== "undefined" ? localStorage.getItem('theme') || 'dark' : 'dark';
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme || 'dark');
-    const token = localStorage.getItem('access_token');
-    if (token) {
-      setIsLoggedIn(true);
+    if (typeof window !== "undefined") {
+      const token = localStorage.getItem('access_token');
+      if (token) {
+        setIsLoggedIn(true);
+      }
     }
-  }, []);
+  }, [theme]);
 
   const handleLogout = () => {
     localStorage.removeItem('access_token');

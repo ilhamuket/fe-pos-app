@@ -24,9 +24,11 @@ const Register: React.FC = () => {
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
 
-    const token = localStorage.getItem('access_token');
-    if (token) {
-      router.push('/dashboard');
+    if (typeof window !== "undefined") {
+      const token = localStorage.getItem('access_token');
+      if (token) {
+        router.push('/dashboard');
+      }
     }
   }, [router, theme]);
 
