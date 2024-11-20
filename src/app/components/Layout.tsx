@@ -12,17 +12,22 @@ const Layout = ({ hideHeader, children }: LayoutProps) => {
   const [isClient, setIsClient] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(() => {
     if (typeof window !== "undefined") {
-      return localStorage.getItem('theme') === 'dark';
+      const savedTheme = localStorage.getItem('theme');
+      return savedTheme ? savedTheme === 'dark' : true; // Default to dark mode
     }
-    return true; // Default to dark mode
+    return true;
   });
+  const [username, setUserName] = useState(''); // Add userName state
+  const [email, setEmail] = useState(''); // Add email state
+  const [id, setId] = useState(''); // Add id state
+
+
 
   useEffect(() => {
     const theme = isDarkMode ? 'dark' : 'light';
     document.documentElement.setAttribute('data-theme', theme);
     if (typeof window !== "undefined") {
       localStorage.setItem('theme', theme);
-
     }
 
     if (theme === 'light') {
@@ -31,9 +36,15 @@ const Layout = ({ hideHeader, children }: LayoutProps) => {
       setIsClient(false);
     }
 
-
     if (typeof window !== "undefined") {
       const token = localStorage.getItem('access_token');
+      const user = localStorage.getItem('user');
+
+      if (user) {
+        setUserName(JSON.parse(user).username);
+        setEmail(JSON.parse(user).email);
+        setId(JSON.parse(user).id);
+      }
       if (token) {
         setIsLoggedIn(true);
       }
@@ -55,8 +66,15 @@ const Layout = ({ hideHeader, children }: LayoutProps) => {
         <div className="flex h-screen">
           <Sidebar />
           <div className="flex-1 flex flex-col">
-            <Navbar handleLogout={handleLogout} isLoggedIn={isLoggedIn} toggleDarkMode={toggleDarkMode} />
-            <main className={`flex-grow w-full p-4 ${isClient ? 'bg-f2f4f8' : ''}`}>
+            <Navbar
+              handleLogout={handleLogout}
+              isLoggedIn={isLoggedIn}
+              toggleDarkMode={toggleDarkMode}
+              userName={username}
+              email={email} // Pass email
+              id={id} // Pass id
+            />
+            <main className={`flex-grow p-4 ${isClient ? 'bg-f2f4f8' : ''}`}>
               {children}
             </main>
           </div>

@@ -12,7 +12,6 @@ interface LoginFormProps {
   errorMessage: string;
   setErrorMessage: React.Dispatch<React.SetStateAction<string>>;
   theme: 'dark' | 'light';
-  toggleTheme: () => void;
 }
 
 
@@ -25,8 +24,7 @@ const LoginForm: React.FC<LoginFormProps> = ({
   setShowErrorModal,
   errorMessage,
   setErrorMessage,
-  theme,
-  toggleTheme
+  theme
 }) => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
@@ -62,6 +60,7 @@ const LoginForm: React.FC<LoginFormProps> = ({
       if (response.ok) {
         const data = await response.json();
         localStorage.setItem('access_token', data.access_token);
+        localStorage.setItem('user', JSON.stringify(data.user));
         router.push('/dashboard');
       } else {
         const errorData = await response.json();

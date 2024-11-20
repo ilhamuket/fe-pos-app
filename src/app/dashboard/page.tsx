@@ -2,19 +2,24 @@
 
 import React, { useEffect, useState } from 'react';
 import Layout from '../components/Layout';
+import { useRouter } from 'next/navigation';
 
 const Dashboard: React.FC = () => {
   const [username, setUsername] = useState('');
+  const router = useRouter();
 
   useEffect(() => {
     if (typeof window !== "undefined") {
       const token = localStorage.getItem('access_token');
+      const user = localStorage.getItem('user');
       if (!token) {
-        window.location.href = '/login';
+        router.push('/login');
       } else {
-        // Fetch user data or decode token to get username
-        // This is a placeholder, replace with actual user fetching logic
-        setUsername('User');
+
+        if (user) {
+          setUsername(JSON.parse(user).username);
+        }
+
       }
     }
 
