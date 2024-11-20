@@ -68,9 +68,20 @@ const Navbar = ({ handleLogout, isLoggedIn, toggleDarkMode, userName, email, id 
           </label>
           <ul tabIndex={0} className="mt-3 p-2 shadow menu menu-compact dropdown-content bg-base-100 rounded-box w-52">
             <li className="menu-title">
-              <span>{userName}</span> {/* Display userName */}
-              <span>{email}</span> {/* Display email */}
+              <p className="text-sm font-bold">Halo, {userName}</p>
+              <p className="text-xs text-gray-500">Paket: Champion Free Trial</p>
+              <p className="text-xs text-gray-500">Aktif s/d: Selamanya</p>
             </li>
+
+            <li className="mt-2">
+              <button className="btn btn-success btn-sm w-full">Upgrade</button>
+            </li>
+
+            <li className="menu-title mt-3">
+              <p className="text-xs">Email: {email}</p>
+              <p className="text-xs">Telp: </p>
+            </li>
+
             <li>
               <Link href="/profile">Profile</Link>
             </li>
