@@ -17,7 +17,14 @@ const Login: React.FC = () => {
   const router = useRouter();
 
   useEffect(() => {
-    document.documentElement.setAttribute('data-theme', theme);
+    const savedTheme = localStorage.getItem('theme') as 'dark' | 'light';
+
+    if (savedTheme) {
+      setTheme(savedTheme);
+      document.documentElement.setAttribute('data-theme', savedTheme);
+    } else {
+      document.documentElement.setAttribute('data-theme', theme);
+    }
 
     if (typeof window !== "undefined") {
       const token = localStorage.getItem('access_token');
@@ -28,12 +35,6 @@ const Login: React.FC = () => {
   }, [router, theme]);
 
 
-
-  const toggleTheme = () => {
-    const newTheme = theme === 'dark' ? 'light' : 'dark';
-    setTheme(newTheme);
-    document.documentElement.setAttribute('data-theme', newTheme);
-  };
 
 
   return (
@@ -50,7 +51,6 @@ const Login: React.FC = () => {
           errorMessage={errorMessage}
           setErrorMessage={setErrorMessage}
           theme={theme}
-          toggleTheme={toggleTheme}
         />
 
       </div>

@@ -1,38 +1,22 @@
-"use client";
-import React from "react";
-import Link from "next/link";
-import { useState } from "react";
+import React from 'react';
+import Link from 'next/link';
 
-interface HeaderProps {
-  isLoggedIn: boolean;
+interface NavbarProps {
   handleLogout: () => void;
+  isLoggedIn: boolean;
   toggleDarkMode: () => void;
+  userName: string;
+  email: string; // Add email prop
+  id: string; // Add id prop
 }
 
-const Navbar: React.FC<HeaderProps> = ({ isLoggedIn, handleLogout , toggleDarkMode}) => {
-
- 
-
+const Navbar = ({ handleLogout, isLoggedIn, toggleDarkMode, userName, email, id }: NavbarProps) => {
   return (
-    <nav className="navbar shadow-sm p-2 flex items-center justify-between">
-      {/* Left Section - Quick Actions */}
-      <div className="flex items-center space-x-4">
-    
+    <div className="navbar bg-base-100">
+      <div className="flex-1">
+        <a className="btn btn-ghost normal-case text-xl">MyApp</a>
       </div>
-
-      {/* Right Section - User Actions */}
-      <div className="flex items-center space-x-4">
-        {/* Language Dropdown */}
-        <div className="dropdown">
-          <button tabIndex={0} className="btn btn-ghost">
-            ID
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-            </svg>
-          </button>
-        </div>
-
-        {/* Notifications */}
+      <div className="flex-none">
         <button className="btn btn-ghost">
           <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405a2.032 2.032 0 00-.595-1.411L15 11V7a5 5 0 00-10 0v4l-2.994 3.184a2.032 2.032 0 00-.595 1.411L4 17h11z" />
@@ -77,12 +61,16 @@ const Navbar: React.FC<HeaderProps> = ({ isLoggedIn, handleLogout , toggleDarkMo
 
         {/* User Profile */}
         <div className="dropdown dropdown-end">
-          <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
-            <div className="w-10 rounded-full">
-              <img src="https://via.placeholder.com/40" alt="User Avatar" />
+          <label tabIndex={0} className="btn btn-ghost rounded-lg avatar">
+            <div className="w-10 h-10 rounded-md">
+              <img src="https://via.placeholder.com/40" alt="User Avatar" className="w-full h-full object-cover" />
             </div>
           </label>
           <ul tabIndex={0} className="mt-3 p-2 shadow menu menu-compact dropdown-content bg-base-100 rounded-box w-52">
+            <li className="menu-title">
+              <span>{userName}</span> {/* Display userName */}
+              <span>{email}</span> {/* Display email */}
+            </li>
             <li>
               <Link href="/profile">Profile</Link>
             </li>
@@ -95,7 +83,7 @@ const Navbar: React.FC<HeaderProps> = ({ isLoggedIn, handleLogout , toggleDarkMo
           </ul>
         </div>
       </div>
-    </nav>
+    </div>
   );
 };
 

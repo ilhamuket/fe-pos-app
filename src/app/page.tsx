@@ -8,14 +8,6 @@ import Login from './components/Login';
 const HomePage: React.FC = () => {
   const router = useRouter();
 
-  const handleLoginRedirect = () => {
-    router.push('/login');
-  };
-
-  const handleRegisterRedirect = () => {
-    router.push('/register');
-  };
-
   return (
     <Layout hideHeader>
       <Login />
